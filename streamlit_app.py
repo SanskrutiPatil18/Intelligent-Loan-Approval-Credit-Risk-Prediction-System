@@ -59,10 +59,10 @@ with st.form("loan_application_form"):
             response.raise_for_status()
             prediction_result = response.json()
 
-            st.subheader("Prediction Result:")
+           st.subheader("Prediction Result:")
 
-            # Build ASCII-style output
-            output = f"""
+# Build ASCII-style output
+output = f"""
 ┌─────────────────────────────────┐
 │       LOAN RISK ANALYSIS        │
 ├─────────────────────────────────┤
@@ -77,14 +77,15 @@ with st.form("loan_application_form"):
 │ Key Factors                    │
 """
 
-            for factor in prediction_result.get("key_factors", []):
-                output += f"│ ✓ {factor:<30} │\n"
+for factor in prediction_result.get("key_factors", []):
+    output += f"│ ✓ {factor:<30} │\n"
 
-            output += """│                                 │
+output += """│                                 │
 └─────────────────────────────────┘
 """
 
-            st.text(output)
+st.text(output)
+
 
         except requests.exceptions.ConnectionError:
             st.error(f"Could not connect to FastAPI backend at {FASTAPI_URL}. Please ensure the backend server is running.")
