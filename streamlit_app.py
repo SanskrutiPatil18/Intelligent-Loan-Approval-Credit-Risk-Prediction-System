@@ -59,20 +59,34 @@ with st.form("loan_application_form"):
             response.raise_for_status() # Raise an exception for HTTP errors
             prediction_result = response.json()
 
-            st.subheader('Prediction Result:')
-            if prediction_result['loan_status'] == 'Approved':
-                st.success(f"**Loan Status: {prediction_result['loan_status']}**")
-                st.balloons()
-            else:
-                st.error(f"**Loan Status: {prediction_result['loan_status']}**")
+           st.subheader("Prediction Result:")
 
-            st.write(f"Probability of Approval: {prediction_result['probability_approved']:.2f}")
-            st.write(f"Probability of Rejection: {prediction_result['probability_rejected']:.2f}")
+# Build ASCII-style output
+output = f"""
+┌─────────────────────────────────┐
+│       LOAN RISK ANALYSIS        │
+├─────────────────────────────────┤
+│                                 │
+│ Decision       : {prediction_result['loan_status']}       │
+│ Probability    : {prediction_result.get('probability_approved', 0):.2f}%          │
+│ Risk Level     : {prediction_result.get('risk_level','N/A')}            │
+│                                 │
+│ Credit Score   : {prediction_result.get('cibil_score','N/A')}          │
+│ DTI Ratio      : {prediction_result.get('dti_ratio','N/A')}%          │
+│                                 │
+│ Key Factors                    │
+"""
 
-            st.markdown("--- Request Details ---")
-            st.json(input_data)
-            st.markdown("--- Response Details ---")
-            st.json(prediction_result)
+# Add key factors dynamically if backend sends them
+for factor in prediction_result.get("key_factors", []):
+    output += f"│ ✓ {factor:<30} │\n"
+
+output += """│                                 │
+└─────────────────────────────────┘
+"""
+
+st.text(output)
+
 
         except requests.exceptions.ConnectionError:
             st.error(f"Could not connect to FastAPI backend at {FASTAPI_URL}. Please ensure the backend server is running.")
