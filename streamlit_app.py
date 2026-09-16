@@ -11,7 +11,7 @@ st.title('🏛️ Intelligent Loan Approval & Credit Risk Prediction System')
 st.markdown("Welcome to the Loan Approval Predictor. Please enter the applicant's details below to get an instant loan approval prediction.")
 
 # --- FastAPI Endpoint ---
-FASTAPI_URL = "http://127.0.0.1:8000/predict/" # Adjust if your FastAPI runs on a different host/port
+FASTAPI_URL = "https://loan-api.onrender.com/predict/" # Adjust if your FastAPI runs on a different host/port
 
 # --- Input Form ---
 st.header('Applicant Information')
