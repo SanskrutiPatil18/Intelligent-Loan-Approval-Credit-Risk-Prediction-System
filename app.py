@@ -74,3 +74,41 @@ async def predict_loan_status_batch(batch_applications: LoanApplicationBatch):
     raw_data_list = [app.dict() for app in batch_applications.applications]
     prediction_results = predictor.predict_batch(raw_data_list)
     return prediction_results
+
+@app.post("/predict")
+def predict(data: LoanData):
+    # Example ML prediction logic
+    prob_approved = model.predict_proba([[...]])[0][1] * 100
+    prob_rejected = 100 - prob_approved
+    decision = "Approved" if prob_approved > 50 else "Rejected"
+
+    # Calculate DTI ratio (Debt-to-Income)
+    dti_ratio = (data.loan_amount / data.income_annum) * 100
+
+    # Risk level logic
+    if prob_approved >= 80 and dti_ratio < 35:
+        risk_level = "LOW"
+    elif prob_approved >= 50:
+        risk_level = "MEDIUM"
+    else:
+        risk_level = "HIGH"
+
+    # Key factors (example rules)
+    key_factors = []
+    if data.cibil_score > 750:
+        key_factors.append("Strong Credit History")
+    if data.income_annum > 5000000:
+        key_factors.append("Stable Employment")
+    if dti_ratio < 35:
+        key_factors.append("Low Debt Ratio")
+
+    return {
+        "loan_status": decision,
+        "probability_approved": prob_approved,
+        "probability_rejected": prob_rejected,
+        "cibil_score": data.cibil_score,
+        "dti_ratio": round(dti_ratio, 2),
+        "risk_level": risk_level,
+        "key_factors": key_factors
+    }
+
