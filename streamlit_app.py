@@ -35,11 +35,11 @@ with st.form("loan_application_form"):
         self_employed = st.selectbox('Self Employed', options=['Yes', 'No'])
 
     submitted = st.form_submit_button("Get Loan Prediction")
-
+    
     if submitted:
         # Prepare data for FastAPI
         input_data = {
-            'loan_id': 0, # Placeholder, not used in prediction logic directly but needed for schema
+            'loan_id': 0,
             'no_of_dependents': no_of_dependents,
             'education': education,
             'self_employed': self_employed,
@@ -51,23 +51,23 @@ with st.form("loan_application_form"):
             'commercial_assets_value': commercial_assets_value,
             'luxury_assets_value': luxury_assets_value,
             'bank_asset_value': bank_asset_value,
-            'loan_status': 'Unknown' # Placeholder, will be predicted
+            'loan_status': 'Unknown'
         }
 
         try:
             response = requests.post(FASTAPI_URL, json=input_data)
-            response.raise_for_status() # Raise an exception for HTTP errors
+            response.raise_for_status()
             prediction_result = response.json()
 
-           st.subheader("Prediction Result:")
+            st.subheader("Prediction Result:")
 
-# Build ASCII-style output
-output = f"""
+            # Build ASCII-style output
+            output = f"""
 ┌─────────────────────────────────┐
 │       LOAN RISK ANALYSIS        │
 ├─────────────────────────────────┤
 │                                 │
-│ Decision       : {prediction_result['loan_status']}       │
+│ Decision       : {prediction_result.get('loan_status','N/A')}       │
 │ Probability    : {prediction_result.get('probability_approved', 0):.2f}%          │
 │ Risk Level     : {prediction_result.get('risk_level','N/A')}            │
 │                                 │
@@ -77,16 +77,14 @@ output = f"""
 │ Key Factors                    │
 """
 
-# Add key factors dynamically if backend sends them
-for factor in prediction_result.get("key_factors", []):
-    output += f"│ ✓ {factor:<30} │\n"
+            for factor in prediction_result.get("key_factors", []):
+                output += f"│ ✓ {factor:<30} │\n"
 
-output += """│                                 │
+            output += """│                                 │
 └─────────────────────────────────┘
 """
 
-st.text(output)
-
+            st.text(output)
 
         except requests.exceptions.ConnectionError:
             st.error(f"Could not connect to FastAPI backend at {FASTAPI_URL}. Please ensure the backend server is running.")
@@ -96,4 +94,3 @@ st.text(output)
             st.error(f"Failed to decode JSON response from API. Response text: {response.text}")
         except Exception as e:
             st.error(f"An unexpected error occurred: {e}")
-
