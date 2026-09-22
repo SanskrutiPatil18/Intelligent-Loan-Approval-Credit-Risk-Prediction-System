@@ -36,30 +36,30 @@ with st.form("loan_application_form"):
 
     submitted = st.form_submit_button("Get Loan Prediction")
     
-    if submitted:
+if submitted:
         # Prepare data for FastAPI
-        input_data = {
-            'loan_id': 0,
-            'no_of_dependents': no_of_dependents,
-            'education': education,
-            'self_employed': self_employed,
-            'income_annum': income_annum,
-            'loan_amount': loan_amount,
-            'loan_term': loan_term,
-            'cibil_score': cibil_score,
-            'residential_assets_value': residential_assets_value,
-            'commercial_assets_value': commercial_assets_value,
-            'luxury_assets_value': luxury_assets_value,
-            'bank_asset_value': bank_asset_value,
-            'loan_status': 'Unknown'
-        }
+    input_data = {
+        'loan_id': 0,
+        'no_of_dependents': no_of_dependents,
+        'education': education,
+        'self_employed': self_employed,
+        'income_annum': income_annum,
+        'loan_amount': loan_amount,
+        'loan_term': loan_term,
+        'cibil_score': cibil_score,
+        'residential_assets_value': residential_assets_value,
+        'commercial_assets_value': commercial_assets_value,
+        'luxury_assets_value': luxury_assets_value,
+        'bank_asset_value': bank_asset_value,
+        'loan_status': 'Unknown'
+    }
 
-        try:
-            response = requests.post(FASTAPI_URL, json=input_data)
-            response.raise_for_status()
-            prediction_result = response.json()
+    try:
+        response = requests.post(FASTAPI_URL, json=input_data)
+        response.raise_for_status()
+        prediction_result = response.json()
 
-           st.subheader("Prediction Result:")
+        st.subheader("Prediction Result:")
 
 # Build ASCII-style output
 output = f"""
