@@ -37,7 +37,6 @@ with st.form("loan_application_form"):
     submitted = st.form_submit_button("Get Loan Prediction")
     
 if submitted:
-        # Prepare data for FastAPI
     input_data = {
         'loan_id': 0,
         'no_of_dependents': no_of_dependents,
@@ -61,7 +60,7 @@ if submitted:
 
         st.subheader("Prediction Result:")
 
-        # Use backend values instead of hardcoded text
+        # Use backend values dynamically
         output = f"""
         ┌─────────────────────────────────┐
         │       LOAN RISK ANALYSIS        │
@@ -79,5 +78,8 @@ if submitted:
         st.error(f"HTTP error occurred: {e}. Response: {response.text}")
     except json.JSONDecodeError:
         st.error(f"Failed to decode JSON response from API. Response text: {response.text}")
+    except Exception as e:
+        st.error(f"An unexpected error occurred: {e}")
+
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
