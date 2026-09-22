@@ -35,7 +35,6 @@ with st.form("loan_application_form"):
         self_employed = st.selectbox('Self Employed', options=['Yes', 'No'])
 
     submitted = st.form_submit_button("Get Loan Prediction")
-    
 if submitted:
     input_data = {
         'loan_id': 0,
@@ -60,7 +59,7 @@ if submitted:
 
         st.subheader("Prediction Result:")
 
-        # Use backend values dynamically
+        # Build ASCII-style output dynamically
         output = f"""
         ┌─────────────────────────────────┐
         │       LOAN RISK ANALYSIS        │
@@ -78,8 +77,5 @@ if submitted:
         st.error(f"HTTP error occurred: {e}. Response: {response.text}")
     except json.JSONDecodeError:
         st.error(f"Failed to decode JSON response from API. Response text: {response.text}")
-    except Exception as e:
-        st.error(f"An unexpected error occurred: {e}")
-
     except Exception as e:
         st.error(f"An unexpected error occurred: {e}")
