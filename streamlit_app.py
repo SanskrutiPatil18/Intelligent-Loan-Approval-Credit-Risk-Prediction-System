@@ -73,16 +73,6 @@ if submitted:
         """
         st.text(output)
 
-except requests.exceptions.ConnectionError:
-    st.error(f"Could not connect to FastAPI backend at {FASTAPI_URL}. Please ensure the backend server is running.")
-except requests.exceptions.HTTPError as e:
-    st.error(f"HTTP error occurred: {e}. Response: {response.text}")
-except json.JSONDecodeError:
-    st.error(f"Failed to decode JSON response from API. Response text: {response.text}")
-except Exception as e:
-    st.error(f"An unexpected error occurred: {e}")
-
-
     except requests.exceptions.ConnectionError:
         st.error(f"Could not connect to FastAPI backend at {FASTAPI_URL}. Please ensure the backend server is running.")
     except requests.exceptions.HTTPError as e:
