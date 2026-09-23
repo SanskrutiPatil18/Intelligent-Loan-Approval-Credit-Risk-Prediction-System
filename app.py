@@ -38,7 +38,7 @@ class LoanApplicationBatch(BaseModel):
 async def read_root():
     return {"message": "Loan Approval Prediction API is running!"}
 
-@app.post("/predict/", response_model=dict, summary="Predict Loan Approval for a single application")
+@app.post("/predict/", response_model=dict)
 async def predict_loan_status(application: LoanApplication):
     """
     Predicts the loan approval status for a single applicant.
